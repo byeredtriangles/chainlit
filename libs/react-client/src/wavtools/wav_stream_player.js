@@ -1,3 +1,4 @@
+/* global AudioContext AudioWorkletNode crypto setTimeout globalThis console */
 import { AudioAnalysis } from './analysis/audio_analysis.js';
 import { StreamProcessorSrc } from './worklets/stream_processor.js';
 
@@ -102,11 +103,14 @@ export class WavStreamPlayer {
    * @param {string} [trackId]
    * @returns {Int16Array}
    */
-  add16BitPCM(arrayBuffer, trackId = 'default') {
+  async add16BitPCM(arrayBuffer, trackId = 'default') {
     if (typeof trackId !== 'string') {
       throw new Error(`trackId must be a string`);
     } else if (this.interruptedTrackIds[trackId]) {
       return;
+    }
+    if (!this.context) {
+      await this.connect();
     }
     if (!this.stream) {
       this._start();
