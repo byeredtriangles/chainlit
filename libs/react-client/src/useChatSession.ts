@@ -219,8 +219,8 @@ const useChatSession = () => {
         setAudioConnection(state);
       });
 
-      socket.on('audio_chunk', (chunk: OutputAudioChunk) => {
-        wavStreamPlayer.add16BitPCM(chunk.data, chunk.track);
+      socket.on('audio_chunk', async (chunk: OutputAudioChunk) => {
+        await wavStreamPlayer.add16BitPCM(chunk.data, chunk.track);
         setIsAiSpeaking(true);
       });
 
